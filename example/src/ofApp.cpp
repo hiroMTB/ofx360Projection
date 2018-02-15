@@ -19,7 +19,7 @@ void ofApp::setup(){
     
     gui.setup();
     prm.add(bEqui.set("360 Projection", false));
-    prm.add(bDraw2dGuide.set("Draw 2D Guide", false));
+    prm.add(bDraw2dGuide.set("Draw 2D Guide", true));
     prm.add(bDraw3dGuide.set("Draw 3D Guide", false));
     prm.add(bDrawPoints.set("Draw Points", true));
     prm.add(bDrawLines.set("Draw Lines", false));
@@ -32,18 +32,23 @@ void ofApp::setup(){
     
     vboPoints.setMode(OF_PRIMITIVE_POINTS);
     for(int i=0; i<1000; i++){
-        vboPoints.addColor(ofColor(255,255,255));
         float deg = ofRandom(0, 360);
         float x = cos(ofDegToRad(deg));
         float z = sin(ofDegToRad(deg));
         vec3 v(x, 0, z);
-        vec3 zAxis(0,0,1);
-        vec3 axis = glm::cross(v, zAxis);
-        float deg2 = 0;//ofRandom(-180, 180);
+        vec3 yAxis(0,1,0);
+        vec3 axis = glm::cross(v, yAxis);
+        float deg2 = ofRandom(-180, 180);
         vec3 v2 = glm::rotate(v, ofDegToRad(deg2), axis);
-        float dist = 20; //ofRandom(20,30);
+        float dist = ofRandom(20,30);
         v2 *= dist;
         vboPoints.addVertex(v2);
+
+        float r = ofMap(v2.x, -30, 30, 0, 1);
+        float g = ofMap(v2.y, -30, 30, 0, 1);
+        float b = ofMap(v2.z, -30, 30, 0, 1);        
+        ofFloatColor c(r, g, b);
+        vboPoints.addColor(c);
     }
     
 //    vboLines.setMode(OF_PRIMITIVE_LINES);

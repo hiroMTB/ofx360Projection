@@ -3,7 +3,7 @@
 int main(){
 	
 	ofGLWindowSettings settings;
-	settings.setGLVersion(3,2);
+	//settings.setGLVersion(3,2);
     settings.setSize(9600/5, 1080/5); // 3840*5 x 2160
 	ofCreateWindow(settings);
     
