@@ -19,6 +19,7 @@ void ofApp::setup(){
     
     gui.setup();
     prm.add(bEqui.set("360 Projection", false));
+    prm.add(shereAngle.set("shereAngle", 0, -PI, PI));
     prm.add(bDraw2dGuide.set("Draw 2D Guide", true));
     prm.add(bDraw3dGuide.set("Draw 3D Guide", false));
     prm.add(bDrawPoints.set("Draw Points", true));
@@ -57,12 +58,16 @@ void ofApp::setup(){
 //        vboLines.addVertex(vec3(ofRandom(-2,2), ofRandom(-2,2), ofRandom(-2,2)));
 //    }    
     
+    float cd = 7.44;
+    float ch = 2.15;
+    float clipAngle = atan(cd/ch);
+    
     cylinder.setUseVbo(true);
     cylinder.setRadius(7.44);
     cylinder.setHeight(2.15);
     cylinder.setCapped(false);
     cylinder.setResolutionRadius(16);
-    cylinder.setResolutionHeight(1);
+    cylinder.setResolutionHeight(3);
     cylinder.setResolutionCap(1);
     cylinder.setPosition(0, 0, 0);
     //cylinder.setOrientation(ofVec3f(90,0,0));
@@ -79,7 +84,7 @@ void ofApp::update(){
 void ofApp::begin(ShaderType type){
     ofPushMatrix();
     bEqui ? proj.begin(type) : normalCam.begin();
-    ofDrawAxis(10);
+    ofDrawAxis(1);
     ofTranslate(objPos);
     ofScale(objScale, objScale, objScale);
 }
@@ -109,6 +114,13 @@ void ofApp::draw(){
         ofSetColor(255);
         vboLines.draw();
         
+        float x = 10.0 * cos(shereAngle);
+        float z = 10.0 * sin(shereAngle);
+        ofPushMatrix();
+        ofTranslate(x, 0, z);
+        ofDrawBox(0, 0, 0, 1);
+        ofPopMatrix();
+        
         if(bDraw3dGuide){
             ofNoFill();
             ofSetColor(0,0,255);
@@ -118,12 +130,17 @@ void ofApp::draw(){
     
     if(bDrawTriangles){
         begin(ShaderType::TRIANGLE_SHADER);
-        ofSetColor(255);
+        ofSetColor(255,0,0);
         cylinder.getMesh().setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
         cylinder.drawWireframe();
         
-        ofDrawSphere(10, 10, 2);
-        
+        float x = 10.0 * cos(shereAngle);
+        float z = 10.0 * sin(shereAngle);
+        ofPushMatrix();
+        ofTranslate(x, 0, z);
+        //        ofDrawSphere(0, 0, 0.5);
+        ofDrawBox(0, 0, 0, 1);
+        ofPopMatrix();
         end(ShaderType::TRIANGLE_SHADER);
     }    
     

@@ -51,18 +51,25 @@ public:
     }
     
     void begin(ShaderType type){
+
+        // radian
+        float clipAngle = atan(ofGetHeight()/ofGetWidth());
+        
         cam.begin();
         switch(type){
             case ShaderType::POINT_SHADER:
                 pointShader.begin();
+                pointShader.setUniform1f("clipAngle", clipAngle);
                 break;
             
             case ShaderType::LINE_SHADER:
                 lineShader.begin();
+                lineShader.setUniform1f("clipAngle", clipAngle);
                 break;
             
             case ShaderType::TRIANGLE_SHADER:
                 triShader.begin();
+                triShader.setUniform1f("clipAngle", clipAngle);
                 break;
 
             default:

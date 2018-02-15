@@ -40,19 +40,28 @@ float angle(vec3 v1, vec3 v2){
 //
 //  360 projection
 //
-vec4 project360(mat4 mv, vec4 inVec){
+vec4 project360(mat4 mv, vec4 inVec){ //, float clipAngle){
     vec4 p = mv * inVec;
     p.xyz = p.xyz/p.w;
     
     vec3 zAxis = vec3(0,0,1);
+    vec3 zAxisInv = vec3(0,0,-1);
+
     vec3 yAxis = vec3(0,-1,0);
     vec3 yAxisInv = vec3(0,-1,0);
     
     vec3 pXZ = vec3(p.x, 0, p.z);
-    float theta = angle(zAxis, pXZ, yAxis);
+    float theta = angle(zAxisInv, pXZ, yAxis);
     float delta = angle(yAxisInv, p.xyz);
-    float x = -theta/PI;
+    
+    float x = theta/PI;
     float y = -1.0 + 2.0 * delta/PI;
     float z = 0;
+    
+    if(abs(y)<0.1){
+        y *= 10.0;
+    }else{
+        y = 1.1; // put this outside of screen
+    }
     return vec4(x,y,z,1);
 }

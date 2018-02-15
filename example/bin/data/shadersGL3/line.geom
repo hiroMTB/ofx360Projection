@@ -5,6 +5,7 @@ layout (line_strip) out;
 layout (max_vertices = 128) out;
 
 uniform mat4 modelViewMatrix;
+uniform float clipAngle;
 
 in vec4 vColor[];
 

@@ -29,6 +29,7 @@ class ofApp: public ofBaseApp{
         ofParameter<bool> bDrawPoints;
         ofParameter<bool> bDrawLines;
         ofParameter<bool> bDrawTriangles;
+        ofParameter<float> shereAngle;
     
         ofParameter<glm::vec3> objPos;
         ofParameter<float> objScale;

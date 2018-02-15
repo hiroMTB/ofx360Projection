@@ -6,6 +6,7 @@ layout (triangle_strip) out;
 layout (max_vertices = 12) out;
 
 uniform mat4 modelViewMatrix;
+uniform float clipAngle;
 
 in vec4 vColor[];
 
@@ -51,8 +52,10 @@ void main(void)
     P1  = project360(modelViewMatrix, P1);
     P2  = project360(modelViewMatrix, P2);
     
-    GenerateTriangle(P0, P1, P2, c0);
-    GenerateTriangle(iP0, P0, P2, c0);
-    GenerateTriangle(iP1, P1, P0, c0);
-    GenerateTriangle(iP2, P2, P1, c0);
+    GenerateTriangle(iP0, iP1, iP2, c0);
+    
+    //GenerateTriangle(P0, P1, P2, c0);
+    //GenerateTriangle(iP0, P0, P2, c0);
+    //GenerateTriangle(iP1, P1, P0, c0);
+    //GenerateTriangle(iP2, P2, P1, c0);
 }

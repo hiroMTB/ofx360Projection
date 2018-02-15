@@ -6,6 +6,7 @@ layout (points) out;
 layout (max_vertices = 1) out;
 
 uniform mat4 modelViewMatrix;
+uniform float clipAngle;
 
 in vec4 vColor[];
 
