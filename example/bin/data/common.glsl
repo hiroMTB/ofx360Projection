@@ -58,8 +58,11 @@ vec4 project360(mat4 mv, vec4 inVec){ //, float clipAngle){
     float y = -1.0 + 2.0 * delta/PI;
     float z = 0;
     
-    if(abs(y)<0.1){
-        y *= 10.0;
+    float clipAngle = atan(2.15/7.44);
+    float rate = clipAngle/HALF_PI;
+    
+    if(abs(y)<rate){
+        y /= rate;
     }else{
         y = 1.1; // put this outside of screen
     }

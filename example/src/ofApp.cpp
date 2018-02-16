@@ -9,8 +9,8 @@ void ofApp::setup(){
     
     proj.setup();
     proj.getCamera().setPosition(0,0,0);
-    proj.getCamera().setNearClip(0.01);
-    proj.getCamera().setFarClip(1000);
+    proj.getCamera().setNearClip(100);
+    proj.getCamera().setFarClip(10000);
     
     normalCam.setNearClip(0.01);
     normalCam.setFarClip(1000);
@@ -26,10 +26,12 @@ void ofApp::setup(){
     prm.add(bDrawLines.set("Draw Lines", false));
     prm.add(bDrawTriangles.set("Draw Triangles", true));
 
-    prm.add(objPos.set("Object Position", vec3(0,0,0), vec3(-200,-200,-200), vec3(200,200,200)));
+    prm.add(objPos.set("Object Position", vec3(0,0,-3.72), vec3(-20,-20,-20), vec3(20,20,20)));
     prm.add(objScale.set("Object Scale", 1, 0, 10.0));
     gui.add(fps.setup("fps", "0"));
     gui.add(prm);
+    gui.add(btnSaveScreen.setup("save screen"));
+    btnSaveScreen.addListener(this, &ofApp::saveScreen);
     
     vboPoints.setMode(OF_PRIMITIVE_POINTS);
     for(int i=0; i<1000; i++){
@@ -41,7 +43,7 @@ void ofApp::setup(){
         vec3 axis = glm::cross(v, yAxis);
         float deg2 = ofRandom(-180, 180);
         vec3 v2 = glm::rotate(v, ofDegToRad(deg2), axis);
-        float dist = ofRandom(20,30);
+        float dist = ofRandom(1,11);
         v2 *= dist;
         vboPoints.addVertex(v2);
 
@@ -63,7 +65,7 @@ void ofApp::setup(){
     float clipAngle = atan(cd/ch);
     
     cylinder.setUseVbo(true);
-    cylinder.setRadius(7.44);
+    cylinder.setRadius(3.72);
     cylinder.setHeight(2.15);
     cylinder.setCapped(false);
     cylinder.setResolutionRadius(16);
@@ -85,8 +87,8 @@ void ofApp::begin(ShaderType type){
     ofPushMatrix();
     bEqui ? proj.begin(type) : normalCam.begin();
     ofDrawAxis(1);
-    ofTranslate(objPos);
-    ofScale(objScale, objScale, objScale);
+    //ofTranslate(objPos);
+    //ofScale(objScale, objScale, objScale);
 }
 
 void ofApp::end(ShaderType type){
@@ -114,13 +116,7 @@ void ofApp::draw(){
         ofSetColor(255);
         vboLines.draw();
         
-        float x = 10.0 * cos(shereAngle);
-        float z = 10.0 * sin(shereAngle);
-        ofPushMatrix();
-        ofTranslate(x, 0, z);
-        ofDrawBox(0, 0, 0, 1);
-        ofPopMatrix();
-        
+        ofDrawBox(objPos, 1);
         if(bDraw3dGuide){
             ofNoFill();
             ofSetColor(0,0,255);
@@ -138,9 +134,9 @@ void ofApp::draw(){
         float z = 10.0 * sin(shereAngle);
         ofPushMatrix();
         ofTranslate(x, 0, z);
-        //        ofDrawSphere(0, 0, 0.5);
-        ofDrawBox(0, 0, 0, 1);
+        // ofDrawSphere(0, 0, 0.5);
         ofPopMatrix();
+
         end(ShaderType::TRIANGLE_SHADER);
     }    
     
@@ -161,4 +157,10 @@ void ofApp::draw(){
     ofSetupScreenOrtho();
     ofDisableDepthTest();
     gui.draw();
+}
+
+void ofApp::saveScreen(){
+    
+    ofSaveScreen("screenshot.png");
+    
 }

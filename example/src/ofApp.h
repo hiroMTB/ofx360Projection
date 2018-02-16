@@ -12,7 +12,7 @@ class ofApp: public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-		
+    void saveScreen();
         void begin(ShaderType type);
         void end(ShaderType type);
         
@@ -30,10 +30,10 @@ class ofApp: public ofBaseApp{
         ofParameter<bool> bDrawLines;
         ofParameter<bool> bDrawTriangles;
         ofParameter<float> shereAngle;
-    
         ofParameter<glm::vec3> objPos;
         ofParameter<float> objScale;
-        
+        ofxButton btnSaveScreen;
+    
         ofVboMesh vboPoints;
         ofVboMesh vboLines;
 
