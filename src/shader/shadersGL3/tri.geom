@@ -36,6 +36,29 @@ void main(void)
     vec4 iP1 = gl_in[1].gl_Position;
     vec4 iP2 = gl_in[2].gl_Position;
     
+    
+    {
+        vec4 p0 = modelViewMatrix * iP0;
+        vec4 p1 = modelViewMatrix * iP1;
+        vec4 p2 = modelViewMatrix * iP2;
+        
+        vec4 test01 = intersect_SP(p0.xyz, p1.xyz, vec3(0,1,1), vec3(1,0,0));
+        if(test01.w == 1 && test01.z>0){
+            return;
+        }
+
+        vec4 test12 = intersect_SP(p1.xyz, p2.xyz, vec3(0,1,1), vec3(1,0,0));
+        if(test12.w == 1 && test12.z>0){
+            return;
+        }
+
+        vec4 test20 = intersect_SP(p2.xyz, p0.xyz, vec3(0,1,1), vec3(1,0,0));
+        if(test20.w == 1 && test20.z>0){
+            return;
+        }
+    }
+    
+    
     // original Color
     vec4 c0 = vColor[0];
     vec4 c1 = vColor[1];

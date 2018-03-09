@@ -19,7 +19,7 @@ public:
     
     bool setup(){
 #ifdef TARGET_OPENGLES
-        static_assert(1, "ofxEquidistantCam does not support openGL ES");
+        static_assert(1, "ofx360Projection does not support openGL ES");
 #else
 
         int maxOut = triShader.getGeometryMaxOutputCount();
@@ -36,15 +36,16 @@ public:
         triShader.setGeometryOutputType(GL_TRIANGLES);
         triShader.setGeometryOutputCount(3*4);
         
+        filesystem::path path;
         if(ofIsGLProgrammableRenderer()){
-            pointShader.load("shadersGL3/pass.vert", "shadersGL3/pass.frag", "shadersGL3/point.geom");
-            lineShader.load("shadersGL3/pass.vert", "shadersGL3/pass.frag", "shadersGL3/line.geom");
-            triShader.load("shadersGL3/pass.vert", "shadersGL3/pass.frag", "shadersGL3/tri.geom");
+            path = filesystem::path("../../../../../addons/ofx360Projection/src/shader/shadersGL3");
         }else{
-            pointShader.load("shadersGL2/pass.vert", "shadersGL2/pass.frag", "shadersGL2/point.geom");
-            lineShader.load("shadersGL2/pass.vert", "shadersGL2/pass.frag", "shadersGL2/line.geom");
-            triShader.load("shadersGL2/pass.vert", "shadersGL2/pass.frag", "shadersGL2/tri.geom");
+            path = filesystem::path("../../../../../addons/ofx360Projection/src/shader/shadersGL2");
         }
+        
+        pointShader.load(path/"pass.vert", path/"pass.frag", path/"point.geom");
+        lineShader.load(path/"pass.vert", path/"pass.frag", path/"line.geom");
+        triShader.load(path/"pass.vert", path/"pass.frag", path/"tri.geom");
         
         return pointShader.isLoaded() && lineShader.isLoaded() && triShader.isLoaded();
 #endif
@@ -54,6 +55,7 @@ public:
 
         // radian
         float clipAngle = atan(ofGetHeight()/ofGetWidth());
+        
         
         cam.begin();
         switch(type){
@@ -73,7 +75,7 @@ public:
                 break;
 
             default:
-                static_assert(1, "ofxEquidistantProjection : Unsupported GL primitive");
+                static_assert(1, "ofx360Projection : Unsupported GL primitive");
                 break;
         }
     }
@@ -93,7 +95,7 @@ public:
             break;
 
             default:
-                static_assert(1, "ofxEquidistantProjection : Unsupported GL primitive");
+                static_assert(1, "ofx360Projection : Unsupported GL primitive");
                 break;
         }
         cam.end();
@@ -103,6 +105,13 @@ public:
         return cam;
     }
     
+    void setClipPlane(glm::vec4 p){
+        clipPlane = p;
+    }
+    
+    glm::vec4 getClipPlane(){
+        return clipPlane;
+    }
     
     private:
         ofShader pointShader;
@@ -110,6 +119,7 @@ public:
         ofShader triShader;
     
         ofCamera cam;
+        glm::vec4 clipPlane;
 };
 } // namespace ofx360projection
 #endif /* OFX_360_PROJECTION_H */
